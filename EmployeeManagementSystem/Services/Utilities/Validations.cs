@@ -27,16 +27,11 @@ namespace EmployeeManagementSystem.Services.Utilities
             if (Regex.IsMatch(email, pattern)) return true;
             return false;
         }
-
-        public bool CheckValidations(string roleName, string department, string location)
+        public bool IsMobileValid(long mobile)
         {
-            if (roleName.Length == 0) return false;
-            if (department.Length == 0) return false;
-            if (location.Length == 0) return false;
-            return true;
+            if(mobile.ToString().Length==10) return true;
+            return false;
         }
-
-       
         public bool IsIdUnique(string? empId, EmployeeService employeeService)
         {
             List<Employee> list = employeeService.GetEmployees();
@@ -75,7 +70,6 @@ namespace EmployeeManagementSystem.Services.Utilities
         {
            return string.IsNullOrEmpty(location);  
         }
-
         public bool IsDepartmentEmpty(string? department)
         {
             return string.IsNullOrEmpty(department);
@@ -83,6 +77,10 @@ namespace EmployeeManagementSystem.Services.Utilities
         public bool IsJobTitleEmpty(string? jtitle)
         {
             return string.IsNullOrEmpty(jtitle);
+        }
+        public bool IsRoleNameEmpty(string? roleName)
+        {
+            return string.IsNullOrEmpty(roleName);
         }
     }
 }

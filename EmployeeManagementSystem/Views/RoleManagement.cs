@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ConsoleTables;
 using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Services.Utilities;
+using EmployeeManagementSystem.Views.Enums;
 
 namespace EmployeeManagementSystem.Views
 {
@@ -20,13 +21,13 @@ namespace EmployeeManagementSystem.Views
                 int roleManagementMenu = Convert.ToInt32(Console.ReadLine());
                 switch (roleManagementMenu)
                 {
-                    case 1:
+                    case (int)RoleEnum.AddRole:
                         AddRole(rolesService);
                         break;
-                    case 2:
+                    case (int)RoleEnum.DisplayRole:
                         DisplayRole(rolesService);
                         break;
-                    case 3:
+                    case (int)RoleEnum.GoBack:
                         Console.WriteLine("Go Back");
                         return;
 
@@ -38,23 +39,20 @@ namespace EmployeeManagementSystem.Views
         }
         public void AddRole(RolesService rolesService)
         {
+            Validations validations = new Validations();
             Console.Write("Role Name*:");
             string roleName = Console.ReadLine();
+            if (validations.IsRoleNameEmpty(roleName)) { Console.WriteLine("Role Cannot be Empty"); return; }
             Console.Write("Department*:");
             string department = Console.ReadLine();
+            if (validations.IsDepartmentEmpty(department)) { Console.WriteLine("Department Cannot be Empty"); return; }
             Console.WriteLine("Description:");
             string description = Console.ReadLine();
             Console.WriteLine("Location:");
             string location = Console.ReadLine();
-            Validations validations = new Validations();
-            if (validations.CheckValidations(roleName, department, location))
-            {
-                 rolesService.AddRole(roleName, department, description, location);
-            }
-            else
-            {
-                Console.WriteLine("Fields are Empty");
-            }
+
+            rolesService.AddRole(roleName, department, description, location);
+            
         }
         public void DisplayRole(RolesService rolesService)
         {

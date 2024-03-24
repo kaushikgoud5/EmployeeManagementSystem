@@ -11,7 +11,7 @@ namespace EmployeeManagementSystem.Repositories
     public class RoleRepository:IRoleRepository
     {
         private readonly List<Role> _role;
-        string jsonRolePath = @"C:\Users\kaushik.n\source\repos\EmployeeManagementSystem\EmployeeManagementSystem\Repositories\Utilities\jsonRolePath.json";
+        string jsonRolePath = @"C:\Users\kaushik.n\source\repos\EmployeeManagementSystem\EmployeeManagementSystem\Repositories\DataSource\jsonRolePath.json";
         public RoleRepository() {
             _role = new List<Role>();
 

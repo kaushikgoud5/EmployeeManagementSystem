@@ -8,6 +8,7 @@ using EmployeeManagementSystem.Services;
 using EmployeeManagementSystem.Services.Utilities;
 using ConsoleTables;
 using System.Reflection.Emit;
+using EmployeeManagementSystem.Views.Enums;
 
 namespace EmployeeManagementSystem.Views
 {
@@ -22,22 +23,22 @@ namespace EmployeeManagementSystem.Views
                 int empManagementMenu = Convert.ToInt32(Console.ReadLine());
                 switch (empManagementMenu)
                 {
-                    case 1:
+                    case (int)EmployeeEnum.AddEmployee:
                         AddEmployee(employeeService);
                         break;
-                    case 2:
+                    case(int) EmployeeEnum.DisplayEmployees:
                         DisplayEmployees(employeeService);
                         break;
-                    case 3:
+                    case (int)EmployeeEnum.DisplayOneEmployee:
                         DisplayOneEmployee(employeeService);
                         break;
-                    case 4:
+                    case (int)EmployeeEnum.UpdateEmployee:
                         UpdateEmployee(employeeService);
                         break;
-                    case 5:
+                    case (int)EmployeeEnum.DeleteEmployee:
                         DeleteEmployee(employeeService);
                         break;
-                    case 6:
+                    case (int)EmployeeEnum.GoBack:
                         return;
                     default:
                         Console.WriteLine("You have Entered An Invalid Option");
@@ -51,46 +52,136 @@ namespace EmployeeManagementSystem.Views
                 Validations validations = new Validations();
                 Console.Write("Enter Employee Number*:");
                 string empId = Console.ReadLine();
-                if (validations.IsIdEmpty(empId)) { Console.WriteLine("ID cannot be empty"); return; }
-                if (!validations.IsIdUnique(empId, employeeService)) { Console.WriteLine("ID Should be unique"); return; };
-                if (!validations.IsValidPattern(empId)) { Console.WriteLine("ID is not valid"); return; };
+                while (validations.IsIdEmpty(empId)) { 
+                    Console.WriteLine("ID cannot be empty");
+                    Console.Write("Enter Employee Number*:");
+                    empId = Console.ReadLine();
+                    validations.IsIdEmpty(empId);
+                } 
+                while (!validations.IsValidPattern(empId)) { 
+                    Console.WriteLine("ID is not valid");
+                    Console.Write("Enter Employee Number*(EX:TZ0000):");
+                    empId = Console.ReadLine();
+                    validations.IsValidPattern(empId);
+                    
+                };
+                while (!validations.IsIdUnique(empId, employeeService)) {
+                    Console.WriteLine("ID Should be unique");
+                    Console.Write("Enter Employee Number*:");
+                    empId = Console.ReadLine();
+                    validations.IsIdUnique(empId,employeeService);
+                }
+               
                 Console.Write("Enter First Name*:");
                 string firstName = Console.ReadLine();
-                if (validations.IsFirstNameEmpty(firstName)) { Console.WriteLine("First name cannot be empty"); return; }
+                while (validations.IsFirstNameEmpty(firstName)) { 
+                    Console.WriteLine("First name cannot be empty");
+                    Console.Write("Enter First Name*:");
+                    firstName = Console.ReadLine();
+                }
                 Console.Write("Enter Last Name*:");
                 string lastName = Console.ReadLine();
-                if (validations.IsLastNameEmpty(lastName)) { Console.WriteLine("Last Name Cannot be Empty");return; }
+                while (validations.IsLastNameEmpty(lastName)) { 
+                    Console.WriteLine("Last Name Cannot be Empty");
+                    Console.Write("Enter Last Name*:");
+                    lastName = Console.ReadLine();
+                    validations.IsLastNameEmpty(lastName);
+                }
                 Console.Write("Enter Date of Birth(DD/MM/YYYY format):");
                 string dob = Console.ReadLine();
                 DateTime dateOfBirth = DateTime.ParseExact(dob, "d/M/yyyy", null);
                 Console.Write("Enter Email Id*:");
                 string email = Console.ReadLine();
-                if (validations.IsEmailEmpty(email)) { Console.WriteLine("Email Cannot be Empty"); return; }
-                if (!validations.IsEmailValid(email)) { Console.WriteLine("In valid Email Format"); return; }
+                while (validations.IsEmailEmpty(email)) { 
+                    Console.WriteLine("Email Cannot be Empty");
+                    email = Console.ReadLine();
+                    validations.IsEmailEmpty(email);
+                }
+                while (!validations.IsEmailValid(email)) { 
+                    Console.WriteLine("In valid Email Format");
+                    email = Console.ReadLine();
+                    validations.IsEmailValid(email);
+
+
+                }
                 Console.Write("Enter Mobile Number:");
                 long mobile = Convert.ToInt64(Console.ReadLine());
+                while (!validations.IsMobileValid(mobile)) {
+                    Console.WriteLine("Mobile Number is Invalid(Enter a 10 Digit Number Only)");
+                    mobile = Convert.ToInt64(Console.ReadLine());
+                    validations.IsMobileValid(mobile);
+                }
                 Console.Write("Enter Joining Date*(DD/MM/YYYY format)::");
                 DateTime joinDate;
                 string jdate = Console.ReadLine();
-                if (validations.IsJoinDateEmpty(jdate)) { Console.WriteLine("Joining Date cannot be Empty"); return; }
+                while (validations.IsJoinDateEmpty(jdate)) { 
+                    Console.WriteLine("Joining Date cannot be Empty");
+                    jdate = Console.ReadLine();
+                    validations.IsJoinDateEmpty(jdate);
+                }
                 joinDate = DateTime.ParseExact(jdate, "d/M/yyyy", null);
                 Console.Write("Enter Location*:");
                 string location = Console.ReadLine();
-                if (validations.IsLocationEmpty(location)) { Console.WriteLine("Location Cannot be empty"); return; }
+                while (validations.IsLocationEmpty(location)) { 
+                    Console.WriteLine("Location Cannot be empty");
+                    location = Console.ReadLine();
+                    validations.IsLocationEmpty(location);
+                }
                 Console.Write("Enter Job Title*:");
                 string jobTitle = Console.ReadLine();
-                if (validations.IsJobTitleEmpty(jobTitle)) { Console.WriteLine("Job Title Cannot be empty"); return; }
-                Console.Write("Enter Department*:");
-                string department = Console.ReadLine();
-                if (validations.IsDepartmentEmpty(department)) { Console.WriteLine( "Department Cannot be Empty"); return; }
+                while (validations.IsJobTitleEmpty(jobTitle)) {
+                    Console.WriteLine("Job Title Cannot be empty");
+                    jobTitle = Console.ReadLine();
+                    validations.IsJobTitleEmpty(jobTitle);
+                }
+                Console.WriteLine("Choose Departments*:");
+                string department;
+                StaticData staticData = new StaticData();
+                for (int i = 0; i < staticData.departments.Count; i++) {
+                    Console.WriteLine(i+1 + "." + staticData.departments[i]);
+                }
+                int chooseMenuDept=Convert.ToInt32(Console.ReadLine());
+                while (true)
+                {
+                    if(chooseMenuDept <= 0 && chooseMenuDept > staticData.departments.Count) { 
+                        Console.WriteLine("Invalid");
+                    }
+                    else
+                    {
+                        department = staticData.departments[chooseMenuDept];
+                        break;
+                    }
+                }
+                if (validations.IsDepartmentEmpty(department)) { 
+                    Console.WriteLine( "Department Cannot be Empty");
+                    return;
+                }
+
                 Console.Write("Enter Your Manager:");
                 string managerName = Console.ReadLine();
-                Console.Write("Enter Your Project:");
-                string project = Console.ReadLine();
+                Console.Write("Choose our Projects:");
+                string project;
+                for (int i = 0; i < staticData.projects.Count; i++)
+                {
+                    Console.WriteLine(i + 1 + "." + staticData.departments[i]);
+                }
+                int chooseMenuProject = Convert.ToInt32(Console.ReadLine());
+                while (true)
+                {
+                    if (chooseMenuProject <= 0 && chooseMenuProject > staticData.projects.Count)
+                    {
+                        Console.WriteLine("Invalid");
+                    }
+                    else
+                    {
+                        project = staticData.projects[chooseMenuProject];
+                        break;
+                    }
+                }
                 employeeService.AddEmployee(empId, firstName, lastName, dateOfBirth, email, mobile, joinDate, location, jobTitle, department, managerName, project);
             }
             catch(Exception e) {
-                Console.WriteLine(e.Message+"Please check you date!");
+                Console.WriteLine("Please check your date!");
                 return;
             }
             
@@ -120,7 +211,6 @@ namespace EmployeeManagementSystem.Views
                 if (emp.EmpId == id)
 
                 {
-                    Console.WriteLine("fOUND");
                     table.AddRow(emp.EmpId, emp.FirstName + " " + emp.LastName, emp.Department, emp.Location, DateTime.Now.ToString().Substring(0, 10), emp.Manager, emp.Project);
                 }
             });
@@ -131,13 +221,13 @@ namespace EmployeeManagementSystem.Views
         public void UpdateEmployee(EmployeeService employeeService)
         {
             Console.WriteLine("Enter the Employee ID you want to Update");
-            bool employeeFound = false;
+            bool isEmployeeFound = false;
             string idToBeUpdated = Console.ReadLine();
             employeeService.GetEmployees().ForEach(emp =>
             {
                 if (emp.EmpId == idToBeUpdated)
                 {
-                    employeeFound = true;
+                    isEmployeeFound = true;
                     Console.WriteLine("Enter new Details of an Employee");
                     Console.Write("Enter First Name*:");
                     string firstName = Console.ReadLine();
@@ -167,23 +257,23 @@ namespace EmployeeManagementSystem.Views
 
                 }
             });
-            if (!employeeFound) { Console.WriteLine("Employee Not Found !!!!"); }
+            if (!isEmployeeFound) { Console.WriteLine("Employee Not Found !!!!"); }
             else { Console.WriteLine("Updated Successfully"); }
         }
         public void DeleteEmployee(EmployeeService employeeService)
         {
             Console.WriteLine("Enter Employee ID you want to delete");
-            bool employeeFound = false;
+            bool isEmployeeFound = false;
             string idToBeDeleted = Console.ReadLine();
             employeeService.GetEmployees().ForEach(emp =>
             {
                 if (emp.EmpId == idToBeDeleted)
                 {
-                    employeeFound = true;
+                    isEmployeeFound = true;
                     employeeService.DeleteEmployee(idToBeDeleted);
                 }
             });
-            if (!employeeFound) { Console.WriteLine("Employee Not Found"); }
+            if (!isEmployeeFound) { Console.WriteLine("Employee Not Found"); }
             else { Console.WriteLine("Deleted Successfully"); }
 
         }

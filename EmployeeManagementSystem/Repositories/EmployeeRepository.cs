@@ -17,7 +17,7 @@ namespace EmployeeManagementSystem.Repositories
 
         public EmployeeRepository()
         {
-        jsonEmployeePath = @"C:\Users\kaushik.n\source\repos\EmployeeManagementSystem\EmployeeManagementSystem\Repositories\Utilities\jsonEmployeePath.json";
+        jsonEmployeePath = @"C:\Users\kaushik.n\source\repos\EmployeeManagementSystem\EmployeeManagementSystem\Repositories\DataSource\jsonEmployeePath.json";
             _employee = new List<Employee>();       
         }
         public void  Add(Employee employee)
