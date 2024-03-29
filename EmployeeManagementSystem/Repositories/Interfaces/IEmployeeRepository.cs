@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.ModelsView;
 
 
-namespace EmployeeManagementSystem.Repositories
+namespace EmployeeManagementSystem.Repositories.Interfaces
 {
     public interface IEmployeeRepository
     {
-        List<Employee> Get();
+        List<EmployeeView> Get();
         void Add(Employee employee);
-        void Delete(string  employeeId);
+        void Delete(string employeeId);
 
-        void Update(string idTobeUpdated ,Employee employee);
-        
+        void Update(string idTobeUpdated, Employee employee);
+
 
 
     }

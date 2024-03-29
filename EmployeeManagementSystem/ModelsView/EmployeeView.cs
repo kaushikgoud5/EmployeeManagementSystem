@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EmployeeManagementSystem.Repositories;
 
-namespace EmployeeManagementSystem.Models
+namespace EmployeeManagementSystem.ModelsView
 {
-    public class Employee
-    {   
+    public class EmployeeView
+    {
         public string? EmpId { get; set; }
 
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
         public string? Email { get; set; }
         public long Phone { get; set; }
 
@@ -30,6 +29,5 @@ namespace EmployeeManagementSystem.Models
         public string? Manager { get; set; }
 
         public string? Project { get; set; }
-
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EmployeeManagementSystem.Models;
 
-namespace EmployeeManagementSystem.Repositories
+namespace EmployeeManagementSystem.Repositories.Interfaces
 {
     public interface IRoleRepository
     {

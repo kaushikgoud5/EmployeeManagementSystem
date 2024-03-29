@@ -4,17 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleTables;
-using EmployeeManagementSystem.Services;
-using EmployeeManagementSystem.Services.Utilities;
+using EmployeeManagementSystem.Repositories.Interfaces;
+using EmployeeManagementSystem.Services.Implementations;
+using EmployeeManagementSystem.Services.Interfaces;
 using EmployeeManagementSystem.Views.Enums;
+using EmployeeManagementSystem.Views.Utilities;
 
 namespace EmployeeManagementSystem.Views
 {
     public class RoleManagement
     {
-        public void roleFeatures()
-        {
-            RolesService rolesService = new RolesService();
+        private readonly IRoleService _roleService;
+        public RoleManagement() {
+            _roleService = new RolesService();
+        } 
+        public void RoleFeatures()
+        {   
             while (true)
             {
                 Console.WriteLine("1.Add Role\n2.Display All\n3.Go Back");
@@ -22,10 +27,10 @@ namespace EmployeeManagementSystem.Views
                 switch (roleManagementMenu)
                 {
                     case (int)RoleEnum.AddRole:
-                        AddRole(rolesService);
+                        AddRole(_roleService);
                         break;
                     case (int)RoleEnum.DisplayRole:
-                        DisplayRole(rolesService);
+                        DisplayRole(_roleService);
                         break;
                     case (int)RoleEnum.GoBack:
                         Console.WriteLine("Go Back");
@@ -37,24 +42,16 @@ namespace EmployeeManagementSystem.Views
 
 
         }
-        public void AddRole(RolesService rolesService)
+        public void AddRole(IRoleService rolesService)
         {
-            Validations validations = new Validations();
-            Console.Write("Role Name*:");
-            string roleName = Console.ReadLine();
-            if (validations.IsRoleNameEmpty(roleName)) { Console.WriteLine("Role Cannot be Empty"); return; }
-            Console.Write("Department*:");
-            string department = Console.ReadLine();
-            if (validations.IsDepartmentEmpty(department)) { Console.WriteLine("Department Cannot be Empty"); return; }
-            Console.WriteLine("Description:");
+            string roleName = TakeInput.ValidateInput("Role Name*", Validations.IsNameValidPattern);
+            string department = TakeInput.ValidateInput("Department*", Validations.IsNameValidPattern);
+            Console.Write("Description:");
             string description = Console.ReadLine();
-            Console.WriteLine("Location:");
-            string location = Console.ReadLine();
-
-            rolesService.AddRole(roleName, department, description, location);
-            
+            string location = TakeInput.ValidateInput("Location*", Validations.IsNameValidPattern);
+            rolesService.AddRole(roleName, department, description, location);   
         }
-        public void DisplayRole(RolesService rolesService)
+        public void DisplayRole(IRoleService rolesService)
         {
             Console.WriteLine("Displaying All Roles");
             var table = new ConsoleTable("Name", "Description", "Department", "Location");
